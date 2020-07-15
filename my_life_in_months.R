@@ -2,18 +2,19 @@ library(dplyr)
 library(lubridate)
 library(forcats)
 library(tidyr)
+#devtools::install_github("hrbrmstr/waffle")
 library(waffle)
 library(hrbrthemes)
 library(extrafont)
 library(ggplot2)
 library(prismatic)
 
-loadfonts(device = "pdf", quiet = TRUE)
-
+#extrafont::ttf_import()
+loadfonts(device = "pdf", quiet = FALSE)
 # Prep data ----
 
-birth_year <- 1991
-birth_month <- 6
+birth_year <- 1992
+birth_month <- 1
 current_year <- year(today())
 current_month <- month(today())
 
@@ -34,14 +35,14 @@ life_data <- expand_grid(
 
 eras <- tribble(
   ~year_month, ~era, ~fill_colour,
-  "1991,6", "childhood", "#fbbcb8",
-  "2006,9", "highschool", "#bfdff6",
-  "2009,9", "undergrad", "#9acbf0",
-  "2013,9", "masters", "#78baeb",
-  "2015,9", "data analyst 1", "#a3e3c4",
-  "2017,4", "data\nanalyst", "#75d2a6",
-  "2018,7", "statistician", "#00c290",
-  "2019,9", "freelance\nR dev", "#beaef5"
+  "1992,1", "childhood", "#fbbcb8",
+  "2005,3", "highschool", "#db9e9a",
+  "2011,3", "undergrad", "#9acbf0",
+  "2016,4", "data analyst", "#9fa7e3",
+  "2017,3", "master", "#78baeb",
+  "2019,3", "stagiaire", "#3990ed",
+  "2019,8", "freelance\nR dev", "#beaef5",
+  "2020,1", "PhD", "#00c290"
 )
 
 # Darken fill colour to be used for text annotations
@@ -64,7 +65,9 @@ life_data_list <- split(life_data, life_data$era)
 
 # Base plot
 
-background_colour <- "#F7F7F7"
+
+
+background_colour <- "#ffffff"
 
 life_in_months_base <- life_data %>%
   count(fill_colour) %>% ## the count of each era is the number of months in that era
@@ -87,18 +90,19 @@ life_in_months_base <- life_data %>%
 
 annotation_base_size <- 10 # Use ~10 for exporting at dpi 300, and ~3 for working interactively
 annotation_lineheight <- 1
-initial_annotations_font_family <- "IBM Plex Mono"
+initial_annotations_font_family <- "Comic Sans MS"
 initial_annotations_colour <- "#666666"
 
 initial_text <- function(x, y, label, size = annotation_base_size, colour = initial_annotations_colour, ...) {
-  annotate("text", x = x, y = y, label = label, size = size, colour = colour, family = "IBM Plex Mono", fontface = "italic", ...)
+  annotate("text", x = x, y = y, label = label, size = size, colour = colour, family = "Comic Sans MS", fontface = "italic", ...)
 }
 
 initial_segment <- function(x, xend, y, yend, colour = initial_annotations_colour) {
   geom_segment(aes(x = x, xend = xend, y = y, yend = yend), colour = colour)
 }
 
-life_in_months_initial_annotations <- life_in_months_base +
+ life_in_months_initial_annotations <-
+  life_in_months_base +
   initial_text(x = 0, y = 6.5, label = "1 year", angle = 90) +
   initial_segment(x = 0, xend = 0, y = 1, yend = 5) +
   initial_segment(x = -0.25, xend = 0.25, y = 1, yend = 1) +
@@ -107,20 +111,20 @@ life_in_months_initial_annotations <- life_in_months_base +
   initial_text(x = 1, y = 14.5, label = "1 square = 1 month", size = annotation_base_size * 0.8, lineheight = annotation_lineheight, hjust = 0.4) +
   geom_curve(aes(x = 0, xend = 1, y = 14, yend = 12), arrow = arrow(length = unit(0.0175, "npc")), colour = initial_annotations_colour) +
   initial_text(x = 0.5, y = 0, label = "age", size = annotation_base_size * 0.8, hjust = 0) +
-  geom_segment(aes(x = 2, xend = 4, y = 0, yend = 0), arrow = arrow(length = unit(0.0175, "npc")), colour = initial_annotations_colour) +
-  annotate("text", x = 31.25, y = 6.5, label = "my life\nin months", hjust = 0, family = "Azo Sans", fontface = "bold", lineheight = 1, size = annotation_base_size * 2.5)
+  geom_segment(aes(x = 2, xend = 4, y = 0, yend = 0), arrow = arrow(length = unit(0.0175, "npc")), colour = initial_annotations_colour)
+  #annotate("text", x = 31.25, y = 6.5, label = "my life\nchart", hjust = 0, family = "Arial", lineheight = 1, size = annotation_base_size)
 
 # "Role" annotations ----
 
 role_annotations_y <- -0.25
-roles_size <- annotation_base_size * 1.5
+roles_size <- annotation_base_size
 
 role_text <- function(x, y = role_annotations_y, label, size = roles_size, ...) {
-  annotate("text", x = x, y = y, label = label, size = size, colour = unique(unique(life_data_list[[label]][["text_colour"]])), family = "Cedarville Cursive", ...)
+  annotate("text", x = x, y = y, label = label, size = size, colour = unique(unique(life_data_list[[label]][["text_colour"]])), family = ".SF NS Rounded", ...)
 }
 
 role_text_under <- function(x, y, label, colour_era, size, ...) {
-  annotate("text", x = x, y = y, label = label, colour = unique(life_data_list[[colour_era]][["text_colour"]]), size = size, family = "Cedarville Cursive", ...)
+  annotate("text", x = x, y = y, label = label, colour = unique(life_data_list[[colour_era]][["text_colour"]]), size = size, family = ".SF NS Rounded", ...)
 }
 
 # For annotations: x values are the usually ~midpoint of your age (+1) during that era, give or take for some shifting around to fit labels
@@ -128,18 +132,17 @@ role_text_under <- function(x, y, label, colour_era, size, ...) {
 life_in_months_role_annotations <- life_in_months_initial_annotations +
   role_text(x = 8.5, label = "childhood") +
   role_text(x = 17, label = "highschool") +
-  role_text(x = 19, y = role_annotations_y - 1.25, label = "undergrad") +
-  role_text_under(x = 19, y = role_annotations_y - 2.25, label = "(stats)", colour_era = "undergrad", size = roles_size * 0.75) +
-  geom_curve(aes(x = 21.5, xend = 22, y = -1.5, yend = 0.35), curvature = 0.4, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["undergrad"]][["text_colour"]])) +
-  role_text(x = 24.25, y = role_annotations_y, label = "masters") +
-  role_text_under(x = 24.25, y = role_annotations_y - 1, label = "(also stats)", colour_era = "masters", size = roles_size * 0.75) +
-  role_text(x = 27.5, y = role_annotations_y - 1.5, label = "data\nanalyst", lineheight = annotation_lineheight - 0.25) +
-  geom_curve(aes(x = 26.5, xend = 26, y = -1.15, yend = 0.35), curvature = -0.2, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["data\nanalyst"]][["text_colour"]])) +
-  geom_curve(aes(x = 27.5, xend = 28, y = -1, yend = 0.35), curvature = 0.3, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["data\nanalyst"]][["text_colour"]])) +
-  role_text(x = 31, y = role_annotations_y - 0.25, label = "statistician", lineheight = annotation_lineheight, size = roles_size) +
-  geom_curve(aes(x = 28.75, xend = 29, y = role_annotations_y, yend = 0.35), curvature = -0.15, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["statistician"]][["text_colour"]])) +
-  role_text(x = 33, y = 1.5, label = "freelance\nR dev", lineheight = annotation_lineheight - 0.25) +
-  geom_curve(aes(x = 32.75, xend = 30, y = 0.5, yend = 0.35), curvature = -0.3, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["freelance\nR dev"]][["text_colour"]]))
+  role_text(x = 19, y = role_annotations_y - 1, label = "undergrad") +
+  role_text_under(x = 19, y = role_annotations_y - 1.5, label = "(econ.)", colour_era = "undergrad", size = roles_size * 0.75)+
+  geom_curve(aes(x = 20, xend = 22, y = -1.7, yend = 0.35), curvature = 0.4, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["undergrad"]][["text_colour"]]))+
+  role_text(x = 24, y = role_annotations_y, label = "data analyst") +
+  role_text_under(x = 24, y = role_annotations_y - .5, label = "(INDEC)", colour_era = "data analyst", size = roles_size * 0.75)+
+  geom_curve(aes(x = 25.75, xend = 26, y = -.5, yend = 0.35), curvature = 0.25, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["data analyst"]][["text_colour"]]))+
+  role_text(x = 27, y = role_annotations_y-1, label = "master") +
+  role_text_under(x = 27, y = role_annotations_y - 1.5, label = "(data mining)", colour_era = "master", size = roles_size * 0.75)+
+  geom_curve(aes(x = 27, xend = 27, y = -1, yend = 0.35), curvature = 0.25, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["master"]][["text_colour"]]))+
+  role_text(x = 29, y = role_annotations_y, label = "PhD")
+
 
 # Location annotations ----
 
@@ -147,19 +150,22 @@ location_colour <- "#8c8c8c"
 location_annotations_y <- 13
 
 location_text <- function(x, y = location_annotations_y, label, size = annotation_base_size, ...) {
-  annotate("text", x = x, y = y, label = label, size = size, colour = location_colour, family = "Cedarville Cursive", ...)
+  annotate("text", x = x, y = y, label = label, size = size, colour = location_colour, family = "Arial", ...)
 }
 
-life_in_months_final <- life_in_months_role_annotations +
-  location_text(x = 11, y = location_annotations_y + 0.1, label = "born + raised in calgary") +
-  geom_segment(aes(x = 1, xend = 7, y = 13, yend = 13), colour = location_colour) +
-  geom_segment(aes(x = 15, xend = 22, y = 13, yend = 13), colour = location_colour) +
+life_in_months_final <-
+life_in_months_role_annotations +
+  location_text(x = 13, y = location_annotations_y + 0.1, label = "born + raised in Buenos Aires") +
+  geom_segment(aes(x = 1, xend = 8, y = 13, yend = 13), colour = location_colour) +
+  geom_segment(aes(x = 18, xend = 28, y = 13, yend = 13), colour = location_colour) +
   geom_segment(aes(x = 1, xend = 1, y = 12.75, yend = 13.25), colour = location_colour) +
-  geom_segment(aes(x = 22, xend = 22, y = 12.75, yend = 13.25), colour = location_colour) +
-  location_text(x = 21, y = location_annotations_y + 1, label = "moved to vancouver", hjust = 0.75) +
-  geom_curve(aes(x = 22.7, xend = 23, y = 13.8, yend = 12.6), curvature = -0.5, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour) +
-  location_text(x = 27, y = location_annotations_y + 1, label = "moved to toronto") +
-  geom_curve(aes(x = 27, xend = 26, y = 13.6, yend = 12.6), curvature = -0.2, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)
+  geom_segment(aes(x = 28, xend = 28, y = 12.75, yend = 13.25), colour = location_colour) +
+  location_text(x = 26, y = location_annotations_y + 1, label = "stage in Toulouse", hjust = 0.75) +
+  geom_curve(aes(x = 27.5, xend = 28.3, y = location_annotations_y + 1, yend = 12.6), curvature = -0.8, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour) +
+  location_text(x = 32, y = location_annotations_y + 1, label = "moved to Luxembourg") +
+  geom_curve(aes(x = 31, xend = 30, y = 13.6, yend = 11.6), curvature = -0.3, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
+  role_text_under(x = 33, y = 6, colour_era = "PhD",  size = roles_size, label = "Currently doing \nmy PhD in\nComp. Soc. Science\nat Univ. Luxembourg")
+
 
 # Save final plot ----
 
