@@ -164,7 +164,7 @@ life_in_months_role_annotations +
   geom_curve(aes(x = 27.5, xend = 28.3, y = location_annotations_y + 1, yend = 12.6), curvature = -0.8, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour) +
   location_text(x = 32, y = location_annotations_y + 1, label = "moved to Luxembourg") +
   geom_curve(aes(x = 31, xend = 30, y = 13.6, yend = 11.6), curvature = -0.3, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
-  role_text_under(x = 33, y = 6, colour_era = "PhD",  size = roles_size, label = "Currently doing \nmy PhD in\nComp. Soc. Science\nat Univ. Luxembourg")
+  role_text_under(x = 35, y = 6, colour_era = "PhD",  size = roles_size, label = "Currently doing \nmy PhD in\nComp. Soc. Science\nat Univ. Luxembourg")
 
 
 # Save final plot ----
