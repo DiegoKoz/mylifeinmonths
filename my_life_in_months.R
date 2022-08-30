@@ -42,7 +42,9 @@ eras <- tribble(
   "2017,3", "master", "#78baeb",
   "2019,3", "stagiaire", "#3990ed",
   "2019,8", "freelance\nR dev", "#beaef5",
-  "2020,1", "PhD", "#00c290"
+  "2020,1", "PhD", "#00c290",
+  "2022,2", 'research_stay',"#0081c2",
+  "2022,8", "PhD", "#00c290",
 )
 
 # Darken fill colour to be used for text annotations
@@ -157,16 +159,19 @@ life_in_months_final <-
 life_in_months_role_annotations +
   location_text(x = 13, y = location_annotations_y + 0.1, label = "born + raised in Buenos Aires") +
   geom_segment(aes(x = 1, xend = 8, y = 13, yend = 13), colour = location_colour) +
-  geom_segment(aes(x = 18, xend = 28, y = 13, yend = 13), colour = location_colour) +
+  geom_segment(aes(x = 18, xend = 27, y = 13, yend = 13), colour = location_colour) +
   geom_segment(aes(x = 1, xend = 1, y = 12.75, yend = 13.25), colour = location_colour) +
-  geom_segment(aes(x = 28, xend = 28, y = 12.75, yend = 13.25), colour = location_colour) +
-  location_text(x = 26, y = location_annotations_y + 1, label = "stage in Toulouse", hjust = 0.75) +
-  geom_curve(aes(x = 27.5, xend = 28.3, y = location_annotations_y + 1, yend = 12.6), curvature = -0.8, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour) +
-  location_text(x = 32, y = location_annotations_y + 1, label = "moved to Luxembourg") +
-  geom_curve(aes(x = 31, xend = 30, y = 13.6, yend = 11.6), curvature = -0.3, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
+  geom_segment(aes(x = 27, xend = 27, y = 12.75, yend = 13.25), colour = location_colour) +
+  location_text(x = 24, y = location_annotations_y + 1, label = "stage in Toulouse", hjust = 0.75) +
+  geom_curve(aes(x = 25, xend = 27.7, y = location_annotations_y + 1, yend = 12.6), curvature = -0.1, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour) +
+  location_text(x = 29, y = location_annotations_y+1.5, label = "moved to\nLuxembourg") +
+  geom_curve(aes(x = 29, xend = 29, y = 13.5, yend = 12), curvature = 0, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
+  location_text(x = 35, y = location_annotations_y + 1, label = "Research stay at\nMontreal and Atlanta") +
+  geom_curve(aes(x = 35, xend = 31.5, y = 13, yend = 12), curvature = -0.3, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
   role_text_under(x = 35, y = 6, colour_era = "PhD",  size = roles_size, label = "Currently doing \nmy PhD in\nComp. Soc. Science\nat Univ. Luxembourg")
 
 
 # Save final plot ----
 
 ggsave("life_in_months.png", plot = life_in_months_final, device = "png", type = "cairo", width = 25, height = 15, dpi = 300)
+
