@@ -174,6 +174,5 @@ life_in_months_role_annotations +
 
 
 # Save final plot ----
-
 ggsave("life_in_months.png", plot = life_in_months_final, device = "png", type = "cairo", width = 25, height = 15, dpi = 300)
 
