@@ -1,14 +1,14 @@
-library(dplyr)
+library(tidyverse)
 library(lubridate)
 library(forcats)
-library(tidyr)
-#devtools::install_github("hrbrmstr/waffle")
+# remotes::install_github("hrbrmstr/waffle")
 library(waffle)
 library(hrbrthemes)
 library(extrafont)
 library(ggplot2)
 library(prismatic)
 
+#hrbrthemes::import_roboto_condensed()
 #extrafont::ttf_import()
 loadfonts(device = "pdf", quiet = FALSE)
 # Prep data ----
@@ -40,11 +40,13 @@ eras <- tribble(
   "2011,3", "undergrad", "#9acbf0",
   "2016,4", "data analyst", "#9fa7e3",
   "2017,3", "master", "#78baeb",
-  "2019,3", "stagiaire", "#3990ed",
+  "2019,3", "stagiaire", "#d2001e",
   "2019,8", "freelance\nR dev", "#beaef5",
-  "2020,1", "PhD", "#00c290",
-  "2022,2", 'research_stay',"#0081c2",
-  "2022,8", "PhD", "#00c290",
+  "2020,1", "PhD", "#eb0000",
+  "2022,2", 'research_stay',"#B3A369",
+  "2022,8", "PhD", "#eb0000",
+  "2023,5", "PostDoc", "royalblue",
+
 )
 
 # Darken fill colour to be used for text annotations
@@ -74,7 +76,7 @@ background_colour <- "#ffffff"
 life_in_months_base <- life_data %>%
   count(fill_colour) %>% ## the count of each era is the number of months in that era
   ggplot(aes(fill = fill_colour, values = n)) +
-  geom_waffle(color = background_colour, n_rows = 12, size = 1, flip = FALSE) + ## make each row a year/12 months
+  geom_waffle(color = background_colour, n_rows = 12, size = 1, flip = FALSE,na.rm = TRUE) + ## make each row a year/12 months
   coord_equal() +
   scale_x_continuous(limits = c(-0.5, 37.5)) + # The max here will differ based on how old you are! I'm 29 (so there are 30 squares), so ~7.5 more for the additional annotation on the side
   scale_y_continuous(limits = c(-2.5, 14.5)) +
@@ -143,7 +145,7 @@ life_in_months_role_annotations <- life_in_months_initial_annotations +
   role_text(x = 27, y = role_annotations_y-1, label = "master") +
   role_text_under(x = 27, y = role_annotations_y - 1.5, label = "(data mining)", colour_era = "master", size = roles_size * 0.75)+
   geom_curve(aes(x = 27, xend = 27, y = -1, yend = 0.35), curvature = 0.25, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["master"]][["text_colour"]]))+
-  role_text(x = 29, y = role_annotations_y, label = "PhD")
+  role_text(x = 30, y = role_annotations_y, label = "PhD")
 
 
 # Location annotations ----
@@ -168,7 +170,7 @@ life_in_months_role_annotations +
   geom_curve(aes(x = 29, xend = 29, y = 13.5, yend = 12), curvature = 0, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
   location_text(x = 35, y = location_annotations_y + 1, label = "Research stay at\nMontreal and Atlanta") +
   geom_curve(aes(x = 35, xend = 31.5, y = 13, yend = 12), curvature = -0.3, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
-  role_text_under(x = 35, y = 6, colour_era = "PhD",  size = roles_size, label = "Currently doing \nmy PhD in\nComp. Soc. Science\nat Univ. Luxembourg")
+  role_text_under(x = 36, y = 6, colour_era = "PostDoc",  size = roles_size, label = "Currently doing \nmy PostDoc at UdeM-Montreal")
 
 
 # Save final plot ----
