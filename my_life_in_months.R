@@ -137,15 +137,16 @@ life_in_months_role_annotations <- life_in_months_initial_annotations +
   role_text(x = 8.5, label = "childhood") +
   role_text(x = 17, label = "highschool") +
   role_text(x = 19, y = role_annotations_y - 1, label = "undergrad") +
-  role_text_under(x = 19, y = role_annotations_y - 1.5, label = "(econ.)", colour_era = "undergrad", size = roles_size * 0.75)+
-  geom_curve(aes(x = 20, xend = 22, y = -1.7, yend = 0.35), curvature = 0.4, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["undergrad"]][["text_colour"]]))+
+  role_text_under(x = 19, y = role_annotations_y - 1.5, label = "(economics-UBA)", colour_era = "undergrad", size = roles_size * 0.75)+
+  geom_curve(aes(x = 21, xend = 22, y = -1.7, yend = 0.35), curvature = 0.4, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["undergrad"]][["text_colour"]]))+
   role_text(x = 24, y = role_annotations_y, label = "data analyst") +
   role_text_under(x = 24, y = role_annotations_y - .5, label = "(INDEC)", colour_era = "data analyst", size = roles_size * 0.75)+
   geom_curve(aes(x = 25.75, xend = 26, y = -.5, yend = 0.35), curvature = 0.25, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["data analyst"]][["text_colour"]]))+
   role_text(x = 27, y = role_annotations_y-1, label = "master") +
-  role_text_under(x = 27, y = role_annotations_y - 1.5, label = "(data mining)", colour_era = "master", size = roles_size * 0.75)+
+  role_text_under(x = 27, y = role_annotations_y - 1.5, label = "(data mining-UBA)", colour_era = "master", size = roles_size * 0.75)+
   geom_curve(aes(x = 27, xend = 27, y = -1, yend = 0.35), curvature = 0.25, arrow = arrow(length = unit(0.0175, "npc")), colour = unique(life_data_list[["master"]][["text_colour"]]))+
-  role_text(x = 30, y = role_annotations_y, label = "PhD")
+  role_text(x = 30, y = role_annotations_y, label = "PhD")+
+  role_text_under(x = 30, y = role_annotations_y - .5, label = "(UL)", colour_era = "PhD", size = roles_size * 0.75)
 
 
 # Location annotations ----
@@ -170,7 +171,7 @@ life_in_months_role_annotations +
   geom_curve(aes(x = 29, xend = 29, y = 13.5, yend = 12), curvature = 0, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
   location_text(x = 35, y = location_annotations_y + 1, label = "Research stay at\nMontreal and Atlanta") +
   geom_curve(aes(x = 35, xend = 31.5, y = 13, yend = 12), curvature = -0.3, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
-  role_text_under(x = 35.5, y = 7.5, colour_era = "PostDoc",  size = roles_size, label = "Currently doing \nmy PostDoc at\nUdeM-Montreal")
+  role_text_under(x = 37, y = 7.5, colour_era = "PostDoc",  size = roles_size, label = "Currently doing \nmy PostDoc at\nUdeM-Montreal")
 
 
 # Save final plot ----
