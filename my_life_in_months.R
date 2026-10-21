@@ -78,7 +78,7 @@ life_in_months_base <- life_data %>%
   ggplot(aes(fill = fill_colour, values = n)) +
   geom_waffle(color = background_colour, n_rows = 12, size = 1, flip = FALSE,na.rm = TRUE) + ## make each row a year/12 months
   coord_equal() +
-  scale_x_continuous(limits = c(-0.5, 37.5)) + # The max here will differ based on how old you are! I'm 29 (so there are 30 squares), so ~7.5 more for the additional annotation on the side
+  scale_x_continuous(limits = c(-0.5, 39.5)) + # The max here will differ based on how old you are! I'm 29 (so there are 30 squares), so ~7.5 more for the additional annotation on the side
   scale_y_continuous(limits = c(-2.5, 14.5)) +
   scale_fill_identity() +
   labs(y = NULL, x = NULL) +
@@ -171,7 +171,7 @@ life_in_months_role_annotations +
   geom_curve(aes(x = 29, xend = 29, y = 13.5, yend = 12), curvature = 0, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
   location_text(x = 35, y = location_annotations_y + 1, label = "Research stay at\nMontreal and Atlanta") +
   geom_curve(aes(x = 35, xend = 31.5, y = 13, yend = 12), curvature = -0.3, arrow = arrow(length = unit(0.0175, "npc")), colour = location_colour)+
-  role_text_under(x = 37, y = 7.5, colour_era = "PostDoc",  size = roles_size, label = "Currently doing \nmy PostDoc at\nUdeM-Montreal")
+  role_text_under(x = 39, y = 7.5, colour_era = "PostDoc",  size = roles_size, label = "Currently doing \nmy PostDoc at\nUdeM-Montreal")
 
 
 # Save final plot ----
